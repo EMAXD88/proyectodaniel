@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        .container {
+            width: 80%;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+        }
+
+        #drop-area {
+            border: 2px dashed #ccc;
+            border-radius: 8px;
+            padding: 20px;
+            width: 80%;
+            margin: 20px auto;
+            cursor: pointer;
+        }
+
+        #drop-area.highlight {
+            border-color: #4caf50;
+        }
+
+        #file-list {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        #file-list li {
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Bienvenido, Empleado</h1>
+        <div id="drop-area" ondragover="event.preventDefault()" ondrop="handleDrop(event)">
+            Arrastra y suelta archivos aquí o haz clic para seleccionarlos manualmente.
+            <input type="file" id="file-input" multiple style="display: none;">
+        </div>
+        <ul id="file-list"></ul>
+    </div>
+
+    <script>
+        function handleDrop(event) {
+            event.preventDefault();
+            var files = event.dataTransfer.files;
+            handleFiles(files);
+        }
+
+        function handleFiles(files) {
+            var fileList = document.getElementById('file-list');
+
+            for (var i = 0; i < files.length; i++) {
+                var file = files[i];
+                var listItem = document.createElement('li');
+                listItem.textContent = file.name;
+                fileList.appendChild(listItem);
+
+                // Aquí puedes agregar el código para subir el archivo a la base de datos
+            }
+        }
+
+        document.getElementById('drop-area').addEventListener('dragover', function(event) {
+            event.preventDefault();
+            this.classList.add('highlight');
+        });
+
+        document.getElementById('drop-area').addEventListener('dragleave', function(event) {
+            event.preventDefault();
+            this.classList.remove('highlight');
+        });
+
+        document.getElementById('drop-area').addEventListener('drop', function(event) {
+            event.preventDefault();
+            this.classList.remove('highlight');
+            handleDrop(event);
+        });
+
+        document.getElementById('drop-area').addEventListener('click', function() {
+            document.getElementById('file-input').click();
+        });
+
+        document.getElementById('file-input').addEventListener('change', function(event) {
+            handleFiles(event.target.files);
+        });
+    </script>
+</body>
+</html>
